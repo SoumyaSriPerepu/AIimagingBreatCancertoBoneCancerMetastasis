@@ -1,0 +1,24 @@
+## What the Architecture Demonstrates
+
+This project was designed not only to build a predictive model but also to test
+whether increasing model complexity produces scientifically meaningful information.
+
+Three different questions are separated:
+
+### 1. Can we predict the outcome?
+
+Evaluated using predictive performance metrics such as AUROC and AUPRC.
+
+### 2. Does the biological graph improve prediction?
+
+Evaluated using graph-ablation experiments comparing the true STRING graph with
+randomized, identity, and graph-free alternatives.
+
+### 3. Can we trust the model's biological explanations?
+
+Evaluated using explanation stability, random baselines, label-shuffled controls,
+and deletion experiments.
+
+These questions are intentionally separated because good predictive performance
+does not automatically imply that the biological graph is useful, and a model
+explanation does not automatically represent a reproducible biological mechanism.
