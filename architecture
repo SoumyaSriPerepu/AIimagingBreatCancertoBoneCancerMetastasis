@@ -1,0 +1,105 @@
+## How to Read the Architecture
+
+The architecture can be understood as four connected analytical layers.
+
+### Layer 1 — Molecular Data
+
+The workflow begins with the GSE175692 metastatic breast cancer cohort.
+
+Expression and clinical information are aligned at the sample level. The expression
+space is then connected to known protein-protein interactions from STRING v12.0,
+producing a fixed molecular graph containing 737 genes.
+
+This layer defines the biological information available to the downstream analyses.
+
+---
+
+### Layer 2 — Population-Level Biological Analysis
+
+The first analytical branch asks:
+
+> Which genes differ between bone-site and non-bone-site metastatic biopsies?
+
+Differential-expression analysis identifies genes associated with metastatic biopsy
+site at the population level.
+
+Survival analysis separately asks whether candidate genes are associated with patient
+outcomes.
+
+These analyses provide population-level biological evidence and should not be
+confused with model explanations.
+
+---
+
+### Layer 3 — Predictive Modeling
+
+The second branch asks:
+
+> Can gene-expression patterns distinguish bone-site from non-bone-site metastatic
+> biopsies or predict 36-month mortality?
+
+Several models are evaluated:
+
+- Graph-CNN using the STRING network
+- Random Forest
+- Logistic Regression
+- Graph-free MLP
+
+The Graph-CNN therefore does not operate in isolation. Conventional and graph-free
+models provide baselines for determining whether graph learning actually adds value.
+
+---
+
+### Layer 4 — Explainability and Reliability
+
+After training the Graph-CNN, GLRP-style relevance analysis is used to identify genes
+that contributed strongly to individual model predictions.
+
+However, producing an explanation is only the first step.
+
+The project additionally evaluates whether those explanations are:
+
+- reproducible across model retraining,
+- different between predicted classes,
+- stronger than random gene-set expectations,
+- robust to label-shuffled controls, and
+- supported by deletion experiments.
+
+This layer separates "the model produced an explanation" from the much stronger
+claim that "the explanation represents a stable biological mechanism."
+
+---
+
+## Why Graph Ablation Matters
+
+A central experiment in this project tests whether the biological STRING network
+actually contributes useful predictive information.
+
+If the true biological graph is important, a Graph-CNN using the real STRING
+network should outperform models using disrupted or absent graph structure.
+
+The study therefore compares:
+
+True STRING Graph
+        |
+        v
+    Graph-CNN
+
+against:
+
+Degree-Preserving Shuffled Graph
+        |
+        v
+    Graph-CNN
+
+Identity Adjacency
+        |
+        v
+    Graph-CNN
+
+and:
+
+Gene Expression
+        |
+        v
+Graph-Free MLP / Logistic Regression / Random Forest
